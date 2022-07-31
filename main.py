@@ -41,14 +41,10 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.clearBrowser = self.contextMenu.addAction('清空显示')
         self.clearBrowser.triggered.connect(self.Event)
 
+        self.comboBox_2.currentIndexChanged.connect(self.combox2Change_event)
+
         #读取配置
-        conn=sqlite3.connect("Animation.db")
-        cursor = conn.execute("SELECT * from search202207")
-        #print("NAME\tKEY")
-        for row in cursor:
-            self.targets.append({"name":row[0],"key":row[1]})
-            self.comboBox.addItem(row[0])
-        conn.close()
+        self.readAnimation("七月番")
 
         # print(self.targets)
 
@@ -69,6 +65,30 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         #UI更新定时器
         self.uiTimer.start(2000)
 
+
+    def readAnimation(self,quarter):
+        self.targets = []
+
+        if(quarter == "七月番"):
+            dbName = "search202207"
+        elif(quarter == "四月番"):
+            dbName = "search202204"
+        else:
+            print("未知：" + quarter)
+            return
+
+        conn=sqlite3.connect("Animation.db")
+        cursor = conn.execute("SELECT * from " + dbName)
+        for row in cursor:
+            self.targets.append({"name":row[0],"key":row[1]})
+            self.comboBox.addItem(row[0])
+        conn.close()
+
+
+    def combox2Change_event(self):
+        quarter = self.comboBox_2.currentText()
+        self.comboBox.clear()
+        self.readAnimation(quarter)
 
     #更新UI
     def updateStatus(self):
