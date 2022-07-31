@@ -9,7 +9,7 @@ from gui import Ui_MainWindow
 import sys
 from loguru import logger
 import time
-
+import  sqlite3
 
 class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
@@ -19,12 +19,12 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.init()
         
     def init(self):
-        self.version = "v0.1.0"
-
+        self.version = "v0.1.1"
+        self.targets = []
         self.statusBar=QStatusBar()
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage('久远~~~',5000) 
-        self.setWindowTitle('开发中 ' + self.version)
+        self.setWindowTitle('爬取工具 ' + self.version)
         # logger.add("./log/webPrint.log",format="{time:YYYY-MM-DD at HH:mm:ss}|{level}|{message}",rotation="500 MB",encoding='utf-8',filter="",level="INFO")
 
         #绑定事件
@@ -42,16 +42,27 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.clearBrowser.triggered.connect(self.Event)
 
         #读取配置
-        with open ("target.txt", "r",encoding='utf-8') as fp:
-            try:
-                target = fp.readlines() 
-                for line  in target:
-                    line = line.replace('\n', '')
-                    line = line.replace('\r', '')
-                    self.comboBox.addItem(line)
-            except:
-                QMessageBox.about(self,"没有搜索项","请编辑程序目录下的target.txt文件，每一行为一个搜索项")
-                self.pushButton.setEnabled(False)
+        conn=sqlite3.connect("Animation.db")
+        cursor = conn.execute("SELECT * from search202207")
+        print("NAME\tKEY")
+
+
+        for row in cursor:
+            self.targets.append({"name":row[0],"key":row[1]})
+            self.comboBox.addItem(row[0])
+        conn.close()
+        print(self.targets)
+
+        # with open ("target.txt", "r",encoding='utf-8') as fp:
+        #     try:
+        #         target = fp.readlines() 
+        #         for line  in target:
+        #             line = line.replace('\n', '')
+        #             line = line.replace('\r', '')
+        #             self.comboBox.addItem(line)
+        #     except:
+        #         QMessageBox.about(self,"没有搜索项","请编辑程序目录下的target.txt文件，每一行为一个搜索项")
+        #         self.pushButton.setEnabled(False)
 
         # 消息队列
         self.msgQueue = queue.Queue()
@@ -87,12 +98,16 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton.setEnabled(False)
         self.showMessage("开始爬取")
         # keyword = self.lineEdit.text()
-
-        keyword = self.comboBox.currentText()
-        if(keyword == ""):
-            self.showMessage("请输入关键字")
+                              
+        index = self.comboBox.currentIndex()
+        #keyword = self.targets[index]["name"] + self.targets[index]["key"]
+        #print(keyword)
+        keyword = self.targets[index]
+        if(keyword["name"] == ""):
+            self.showMessage("缺失查询关键字")
             self.pushButton.setEnabled(True)
             return
+
         self.searchTask = Search.searchTask(keyword,self.searchOverCallback,self.showMessage)
         self.searchTask.start()
   
