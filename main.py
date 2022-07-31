@@ -44,25 +44,13 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         #读取配置
         conn=sqlite3.connect("Animation.db")
         cursor = conn.execute("SELECT * from search202207")
-        print("NAME\tKEY")
-
-
+        #print("NAME\tKEY")
         for row in cursor:
             self.targets.append({"name":row[0],"key":row[1]})
             self.comboBox.addItem(row[0])
         conn.close()
-        print(self.targets)
 
-        # with open ("target.txt", "r",encoding='utf-8') as fp:
-        #     try:
-        #         target = fp.readlines() 
-        #         for line  in target:
-        #             line = line.replace('\n', '')
-        #             line = line.replace('\r', '')
-        #             self.comboBox.addItem(line)
-        #     except:
-        #         QMessageBox.about(self,"没有搜索项","请编辑程序目录下的target.txt文件，每一行为一个搜索项")
-        #         self.pushButton.setEnabled(False)
+        # print(self.targets)
 
         # 消息队列
         self.msgQueue = queue.Queue()

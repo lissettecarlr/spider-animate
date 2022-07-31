@@ -24,19 +24,17 @@ class  searchTask(threading.Thread):
     def startSearch(self,keyword):
         # 对关键字进行搜索，得到各类信息
         keywordName = keyword["name"]
-        keywordParam  = keyword["key"]
-        print(type(keywordName))
-        print((keywordName))
-        (soup, htmlText) = searchAnimation(keyword = keywordName + keywordParam)
+        searchKey = keywordName + " " + keyword["key"]
+        (soup, htmlText) = searchAnimation(keyword = searchKey)
         if(soup == None):
             self.uiPrint("爬取失败")
             return
 
         # 该关键字搜索出的页码
         pageNum = getSearchPageNum(soup)
-        self.uiPrint("关键字: " + keywordName + keywordParam + " 共有 " + str(pageNum) + " 页")
+        self.uiPrint("关键字: " + searchKey + " 共有 " + str(pageNum) + " 页")
         if pageNum == None:
-            self.uiPrint("搜索 :"+ keywordName + keywordParam+ " 没找到资源")
+            self.uiPrint("搜索 :"+ searchKey+ " 没找到资源")
             return
 
         # 该关键字搜索出的数据总数
@@ -46,9 +44,10 @@ class  searchTask(threading.Thread):
             return
         self.uiPrint("共搜索出资源：{}".format(resultCount))
     
-        # 建立专属文件夹
-        seedFilePath = os.path.dirname(os.path.realpath(sys.argv[0]))    
-        savePath = seedFilePath + "\\" + keywordName
+        # 文件夹统一为一个
+
+        seedFilePath = os.path.dirname(os.path.realpath(sys.argv[0])) 
+        savePath = seedFilePath + "\\" + "result"
         csvFile = savePath + "\\" + keywordName + ".csv"
         # 判断文件夹是否存在,如果不存在就创建一个
         if not os.path.exists(savePath):
@@ -66,8 +65,8 @@ class  searchTask(threading.Thread):
         # 循环爬取每一页的数据
         for page in range(1, int(pageNum)+1):
             if(page != 1):
-                (soup, htmlText) = searchAnimation(keywordName + keywordParam,page)  
-            downInfo = self.searchAction(soup,seedFilePath + "\\" + keywordName)
+                (soup, htmlText) = searchAnimation(searchKey,page)  
+            downInfo = self.searchAction(soup)
             self.uiPrint("第{}页 处理完成".format(page))
             saveResult(downInfo,csvFile)
             if(self.closeFlag == True):
@@ -75,7 +74,7 @@ class  searchTask(threading.Thread):
 
 
     # 对搜索出来的页面进行操作
-    def searchAction(self,soup, path):
+    def searchAction(self,soup):
         #获取本页数量
         pageListCount = getSearchOnePageListCount(soup)
         self.uiPrint("当前页面有 {} 个资源".format(pageListCount))
