@@ -62,23 +62,34 @@ def createHtmlTable(name):
     table = HTMLTable(caption=name)
     table.append_header_rows((
         ('名称',  '链接',  '大小'),
-    ))   
-    table.set_cell_style({
-    'border-color': '#000',
-    'border-width': '1px',
-    'border-style': 'solid',
-    'padding': '5px',
+    ))  
+
+    table.set_style({
+    'border-collapse': 'collapse',
+    'word-break': 'keep-all',
+    'white-space': 'nowrap',
+    'font-size': '14px',
     })
+    
+    table.set_cell_style({
+        'border-color': '#000',
+        'border-width': '1px',
+        'border-style': 'solid',
+        'padding': '5px',
+    })
+
     # 表头样式
     table.set_header_row_style({
-    'color': '#fff',
-    'background-color': '#48a6fb',
-    'font-size': '18px',
+        'color': '#fff',
+        'background-color': '#48a6fb',
+        'font-size': '18px',
     })
+
     # 覆盖表头单元格字体样式
     table.set_header_cell_style({
-    'padding': '15px',
+        'padding': '15px',
     })
+
     return table
 
 def appendHtmlTable(table,name,url,size):

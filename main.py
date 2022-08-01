@@ -51,8 +51,6 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         #读取配置
         self.readAnimation("七月番")
 
-        # print(self.targets)
-
         # 消息队列
         self.msgQueue = queue.Queue()
 
@@ -88,7 +86,6 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
             self.targets.append({"name":row[0],"key":row[1]})
             self.comboBox.addItem(row[0])
         conn.close()
-
 
     def combox2Change_event(self):
         quarter = self.comboBox_2.currentText()
@@ -150,8 +147,10 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def shwoAnimationUpdate(self):
         conn=sqlite3.connect("Animation.db")
         cursor = conn.execute("SELECT * from " + self.dbName)
+        self.showMessage("===============================")    
         for row in cursor:
-            self.showMessage(row[0] + " : " + row[2])
+            self.showMessage(row[0] + "\t\t\t" + row[2])
+        self.showMessage("===============================")
         conn.close()
     
     def readme(self):
