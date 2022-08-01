@@ -19,7 +19,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.init()
         
     def init(self):
-        self.version = "v0.1.1"
+        self.version = "v0.1.2"
         self.targets = []
         self.dbName = ""
         self.statusBar=QStatusBar()
