@@ -54,3 +54,6 @@ docs/_build/
 target/
 scripts/
 .idea/
+
+
+result/

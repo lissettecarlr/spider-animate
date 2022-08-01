@@ -1,4 +1,5 @@
 
+from ctypes import util
 import os
 import sys
 import csv
@@ -6,6 +7,7 @@ import spiderTo36dm
 import threading
 import time
 import random
+import utils
 class  searchTask(threading.Thread):
     def __init__(self,keyword,cb,print):
         threading.Thread.__init__(self)
@@ -45,22 +47,34 @@ class  searchTask(threading.Thread):
         self.uiPrint("共搜索出资源：{}".format(resultCount))
     
         # 文件夹统一为一个
-
         seedFilePath = os.path.dirname(os.path.realpath(sys.argv[0])) 
-        savePath = seedFilePath + "\\" + "result"
-        csvFile = savePath + "\\" + keywordName + ".csv"
+        self.savePath = seedFilePath + "\\" + "result"
+        self.csvFile = self.savePath + "\\" + keywordName + ".csv"
+        self.htmlFile = self.savePath + "\\" + keywordName + ".html"
         # 判断文件夹是否存在,如果不存在就创建一个
-        if not os.path.exists(savePath):
-            os.makedirs(savePath)
+        if not os.path.exists(self.savePath):
+            os.makedirs(self.savePath)
 
-        if(os.path.exists(csvFile)):
+
+        if(os.path.exists(self.csvFile)):
             try:
-                os.remove(csvFile)
-                print("删除："+ csvFile)
+                os.remove(self.csvFile)
+                print("删除："+ self.csvFile)
             except:
                 self.uiPrint("删除文件失败")
         else:
             pass
+
+        if(os.path.exists(self.htmlFile)):
+            try:
+                os.remove(self.htmlFile)
+                print("删除："+ self.htmlFile)
+            except:
+                self.uiPrint("删除文件失败")
+        else:
+            pass
+
+        self.table = utils.createHtmlTable(keywordName)
 
         # 循环爬取每一页的数据
         for page in range(1, int(pageNum)+1):
@@ -68,7 +82,7 @@ class  searchTask(threading.Thread):
                 (soup, htmlText) = searchAnimation(searchKey,page)  
             downInfo = self.searchAction(soup)
             self.uiPrint("第{}页 处理完成".format(page))
-            saveResult(downInfo,csvFile)
+            self.saveResult(downInfo)
             if(self.closeFlag == True):
                 return
 
@@ -108,6 +122,23 @@ class  searchTask(threading.Thread):
             time.sleep(random.uniform(1.1,5.4)) 
         return downloadInfos
 
+    # result应该具备title、downloadUrl、time、size四个属性
+    def saveResult(self,result):
+        if len(result) == 0 or result == None:
+                return
+        else:
+            for info in result:
+                try:
+                    with open (self.csvFile, "a+") as fp:
+                        writer = csv.writer(fp)
+                        writer.writerow((info["title"], info["downloadUrl"], info["magent"],info["time"], info["size"]))
+                except IOError as error:
+                    print(error)
+                finally:
+                    pass
+                utils.appendHtmlTable(self.table,info["title"],info["magent"],info["size"])
+            utils.saveHtmlTable(self.table,self.htmlFile)
+
 def getSearchPageNum(soup) -> int:
     return spiderTo36dm.getSearchPageNum(soup)
     
@@ -119,21 +150,7 @@ def getSearchOnePageListCount(soup) -> int:
     return spiderTo36dm.getSearchOnePageListCount(soup)
  
 
-# result应该具备title、downloadUrl、time、size四个属性
-def saveResult(result,path):
-    if len(result) == 0 or result == None:
-            return
-    else:
-        for info in result:
-            try:
-                with open (path, "a+") as fp:
-                    writer = csv.writer(fp)
-                    writer.writerow((info["title"], info["downloadUrl"], info["magent"],info["time"], info["size"]))
-            except IOError as error:
-                print(error)
-            finally:
-                pass
-    pass
+
 
 
 

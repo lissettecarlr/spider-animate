@@ -21,6 +21,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def init(self):
         self.version = "v0.1.1"
         self.targets = []
+        self.dbName = ""
         self.statusBar=QStatusBar()
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage('久远~~~',5000) 
@@ -42,6 +43,10 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.clearBrowser.triggered.connect(self.Event)
 
         self.comboBox_2.currentIndexChanged.connect(self.combox2Change_event)
+
+        #菜单
+        self.action.triggered.connect(self.shwoAnimationUpdate)
+        self.action_2.triggered.connect(self.readme)
 
         #读取配置
         self.readAnimation("七月番")
@@ -70,15 +75,15 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.targets = []
 
         if(quarter == "七月番"):
-            dbName = "search202207"
+            self.dbName = "search202207"
         elif(quarter == "四月番"):
-            dbName = "search202204"
+            self.dbName = "search202204"
         else:
             print("未知：" + quarter)
             return
 
         conn=sqlite3.connect("Animation.db")
-        cursor = conn.execute("SELECT * from " + dbName)
+        cursor = conn.execute("SELECT * from " + self.dbName)
         for row in cursor:
             self.targets.append({"name":row[0],"key":row[1]})
             self.comboBox.addItem(row[0])
@@ -141,6 +146,17 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
             txt = t + txt
         self.msgQueue.put(txt)
 
+    # 显示更新日期
+    def shwoAnimationUpdate(self):
+        conn=sqlite3.connect("Animation.db")
+        cursor = conn.execute("SELECT * from " + self.dbName)
+        for row in cursor:
+            self.showMessage(row[0] + " : " + row[2])
+        conn.close()
+    
+    def readme(self):
+        QDesktopServices.openUrl(QUrl("https://github.com/lissettecarlr/spider-animate"))
+
     # 右键菜单
     def showMenu(self,pos):
         self.contextMenu.exec_(QCursor.pos()) 
@@ -149,6 +165,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
             self.textBrowser.clear()
 
 def winOpen(sys):
+    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app= QtWidgets.QApplication(sys.argv)
     win = wincore()
     win.show()

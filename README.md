@@ -1,10 +1,22 @@
 # spider-animate
 
-## 使用
-* 下载spider-animate.exe
-* 在运行目录建立一个target.txt，每一行为一个爬取目标，尽量多写标签，减少搜索量，例如： [NC-Raws] 传颂之物 二人的白皇
-* 双击运行exe，下拉框选择需要爬取的内容，点击爬取按钮，等待显示框提示爬取完成。
+
+## 简述
+为了便利舍弃通用性，毕竟这软件就是自用的
+
+## 打包
+```
+pyinstaller -F ./main.py --noconsole -p C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib;C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib\site-packages; 
+```
+
+## 直接使用
+* 下载spider-animate.zip，解压后得到两个文件：Animation.db、xxx.exe
+* 执行exe，弹出界面，通过年份季度筛选，目前爬取动漫目录固定。
+
 ![](./pic/p_1.png)
 
-* 在运行程序的目录会看到你爬取内容的文件夹，里面存放了一个csv文件，里面保存了文件名、种子链接、磁力链接、大小、时间
+* 选择需要爬取的目标，点击爬取按钮，等待打印窗口提示爬取完成，然后在执行这个软件目录会有一个result文件夹，该文件夹存放所有爬取动漫的信息。
+
 ![](./pic/p_2.png)
+
+* 打开后能看到名称、大小、和磁力链接、种子链接
