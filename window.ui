@@ -143,6 +143,14 @@ p, li { white-space: pre-wrap; }
     <addaction name="action"/>
     <addaction name="action_2"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>便利</string>
+    </property>
+    <addaction name="action_3"/>
+    <addaction name="action_4"/>
+   </widget>
+   <addaction name="menu_2"/>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -154,6 +162,16 @@ p, li { white-space: pre-wrap; }
   <action name="action_2">
    <property name="text">
     <string>使用说明</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>爬取当前季度</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>爬取今日更新</string>
    </property>
   </action>
  </widget>

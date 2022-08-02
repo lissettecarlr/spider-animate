@@ -1,4 +1,3 @@
-from ctypes.wintypes import tagRECT
 import Search
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
@@ -10,6 +9,8 @@ import sys
 from loguru import logger
 import time
 import  sqlite3
+import utils
+import threading
 
 class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
@@ -19,7 +20,8 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.init()
         
     def init(self):
-        self.version = "v0.1.2"
+        self.version = "v0.1.4"
+        #保存当前季度所有搜索目标
         self.targets = []
         self.dbName = ""
         self.statusBar=QStatusBar()
@@ -47,7 +49,9 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         #菜单
         self.action.triggered.connect(self.shwoAnimationUpdate)
         self.action_2.triggered.connect(self.readme)
-
+        self.action_3.triggered.connect(self.spiderAll)
+        self.action_4.triggered.connect(self.spidertoday)
+        
         #读取配置
         self.readAnimation("七月番")
 
@@ -80,12 +84,10 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
             print("未知：" + quarter)
             return
 
-        conn=sqlite3.connect("Animation.db")
-        cursor = conn.execute("SELECT * from " + self.dbName)
-        for row in cursor:
-            self.targets.append({"name":row[0],"key":row[1]})
-            self.comboBox.addItem(row[0])
-        conn.close()
+        res = utils.selectTable(self.dbName)
+        for row in res:
+            self.targets.append({"name":row["name"],"key":row["key"]})
+            self.comboBox.addItem(row["name"])
 
     def combox2Change_event(self):
         quarter = self.comboBox_2.currentText()
@@ -108,10 +110,8 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton.setEnabled(False)
         self.showMessage("开始爬取")
         # keyword = self.lineEdit.text()
-                              
         index = self.comboBox.currentIndex()
         #keyword = self.targets[index]["name"] + self.targets[index]["key"]
-        #print(keyword)
         keyword = self.targets[index]
         if(keyword["name"] == ""):
             self.showMessage("缺失查询关键字")
@@ -126,12 +126,9 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.pushButton.setEnabled(True)
         self.showMessage("结束")
 
-    def readme(self):
-        QDesktopServices.openUrl(QUrl("https://www.baidu.com"))
-
     def closeEvent(self,event):
         self.uiTimer.stop()
-        self.searchTask.close
+        self.searchTask.close()
  
     def showMessage(self,txt,color="black"):
         t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+" => "
@@ -155,6 +152,33 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     
     def readme(self):
         QDesktopServices.openUrl(QUrl("https://github.com/lissettecarlr/spider-animate"))
+
+    # 通过数据库查询星期，然后轮询
+    def spidertoday(self):
+        res = utils.selectTablebyTodayWeek(self.dbName)
+        targets = []
+        for p in res:
+            targets.append({"name":p["name"],"key":p["key"]})
+        #print(targets)
+        self.showMessage("开始爬取今日更新",color="red")
+        t = threading.Thread(target=self.spiderAllThread,args=(targets,))
+        t.start()
+
+    # 爬取所有
+    def spiderAll(self):
+        #开个新线程执行，否则会卡住UI
+        self.showMessage("开始当前季度全部爬取任务",color="red")
+        t = threading.Thread(target=self.spiderAllThread,args=(self.targets,))
+        t.start()
+        
+    def spiderAllThread(self,list):
+        self.pushButton.setEnabled(False)
+        for tar in list:
+            self.searchTask = Search.searchTask(tar,self.searchOverCallback,self.showMessage)
+            self.searchTask.start()
+            self.searchTask.join()
+        self.pushButton.setEnabled(True)    
+        self.showMessage("批量爬取结束",color="red")
 
     # 右键菜单
     def showMenu(self,pos):

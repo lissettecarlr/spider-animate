@@ -8,6 +8,7 @@ import threading
 import time
 import random
 import utils
+import sqlite3
 class  searchTask(threading.Thread):
     def __init__(self,keyword,cb,print):
         threading.Thread.__init__(self)
@@ -127,6 +128,8 @@ class  searchTask(threading.Thread):
         if len(result) == 0 or result == None:
                 return
         else:
+        
+            #其他方式保存
             for info in result:
                 try:
                     with open (self.csvFile, "a+") as fp:
@@ -137,6 +140,12 @@ class  searchTask(threading.Thread):
                 finally:
                     pass
                 utils.appendHtmlTable(self.table,info["title"],info["magent"],info["size"])
+                #如果由更新则存入数据库
+                if(utils.selectAnimationInfo(info['title']) == False):
+                    utils.insertAnimationInfo(info['title'],info['downloadUrl'],info['magent'],info['size'],info['time'])
+                else:
+                    #print("已存在")
+                    pass
             utils.saveHtmlTable(self.table,self.htmlFile)
 
 def getSearchPageNum(soup) -> int:

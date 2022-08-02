@@ -58,8 +58,17 @@ def getSearchPageNum(soup) -> int:
 # 得到搜索出资源的总数量
 def getSearchTotalNum(soup) -> int:
     resultCountInfos = soup.select("#btm > div.main > div > h2 > span")
+    print(resultCountInfos)
+    if len(resultCountInfos) == 0:
+        return 0
     resultCountText = resultCountInfos[0].get_text()
-    # 使用正则获取其中的数字
+
+    try:
+        resultCountText = resultCountText[resultCountText.rindex("-") + 1 : len(resultCountText)]
+    except:
+        print("resultCountText 截取错误")
+        return None
+    
     resultCounts = re.search(r"\d+",resultCountText)
     resultCount = resultCounts.group()
     if resultCount == 0 or resultCount == None:
