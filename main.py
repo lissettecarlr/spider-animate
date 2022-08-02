@@ -24,6 +24,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         #保存当前季度所有搜索目标
         self.targets = []
         self.dbName = ""
+        self.basePath = os.path.dirname(os.path.realpath(sys.argv[0]))
         self.statusBar=QStatusBar()
         self.setStatusBar(self.statusBar)
         self.statusBar.showMessage('久远~~~',5000) 
@@ -35,7 +36,11 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
 
         #禁止窗口大小改变
         self.setFixedSize(self.width(), self.height())
-
+        try:
+            self.setWindowIcon(QIcon(self.basePath + '/assets/logo.png'))
+        except:
+            pass
+        
         #右键菜单
         self.textBrowser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.textBrowser.customContextMenuRequested.connect(self.showMenu)
@@ -71,7 +76,6 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
 
         #UI更新定时器
         self.uiTimer.start(2000)
-
 
     def readAnimation(self,quarter):
         self.targets = []
@@ -187,9 +191,21 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         if(self.sender().text() == "清空显示"):
             self.textBrowser.clear()
 
+import os
+
 def winOpen(sys):
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app= QtWidgets.QApplication(sys.argv)
+
+    # 配置
+    try:
+        base = os.path.dirname(os.path.realpath(sys.argv[0]))
+        file = open(base + '/assets/qss/style.qss',"r", encoding="utf-8")
+        qss = file.read().replace("$DataPath",".")
+        app.setStyleSheet(qss)
+    except:
+        pass
+
     win = wincore()
     win.show()
     sys.exit(app.exec_())
