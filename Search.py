@@ -128,7 +128,7 @@ class  searchTask(threading.Thread):
         if len(result) == 0 or result == None:
                 return
         else:
-        
+            NewInfoCount = 0
             #其他方式保存
             for info in result:
                 try:
@@ -143,10 +143,12 @@ class  searchTask(threading.Thread):
                 #如果由更新则存入数据库
                 if(utils.selectAnimationInfo(info['title']) == False):
                     utils.insertAnimationInfo(info['title'],info['downloadUrl'],info['magent'],info['size'],info['time'])
+                    NewInfoCount += 1
                 else:
                     #print("已存在")
                     pass
             utils.saveHtmlTable(self.table,self.htmlFile)
+            self.uiPrint("对比上次搜索，更新了{}个".format(NewInfoCount))
 
 def getSearchPageNum(soup) -> int:
     return spiderTo36dm.getSearchPageNum(soup)
