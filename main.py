@@ -40,7 +40,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
             self.setWindowIcon(QIcon(self.basePath + '/assets/logo.png'))
         except:
             pass
-        
+
         #右键菜单
         self.textBrowser.setContextMenuPolicy(Qt.CustomContextMenu)
         self.textBrowser.customContextMenuRequested.connect(self.showMenu)
@@ -146,13 +146,12 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
 
     # 显示更新日期
     def shwoAnimationUpdate(self):
-        conn=sqlite3.connect("Animation.db")
-        cursor = conn.execute("SELECT * from " + self.dbName)
+        res = utils.selectTable(self.dbName)
         self.showMessage("===============================")    
-        for row in cursor:
-            self.showMessage(row[0] + "\t\t\t" + row[2])
+        for row in res:
+            self.showMessage(row["name"] + "\t\t\t" + row["week"])
         self.showMessage("===============================")
-        conn.close()
+
     
     def readme(self):
         QDesktopServices.openUrl(QUrl("https://github.com/lissettecarlr/spider-animate"))
@@ -174,7 +173,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.showMessage("开始当前季度全部爬取任务",color="red")
         t = threading.Thread(target=self.spiderAllThread,args=(self.targets,))
         t.start()
-        
+      
     def spiderAllThread(self,list):
         self.pushButton.setEnabled(False)
         for tar in list:

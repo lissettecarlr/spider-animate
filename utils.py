@@ -121,13 +121,11 @@ def insertAnimationInfo(title,url1,url2,size,time):
     conn.commit()
     conn.close()
 
-
 #查询搜索目标是否存在
 def selectAnimationInfo(title):
     conn = sqlite3.connect(dbName)
     cur = conn.cursor()
     sql = """SELECT title from animationInfo WHERE title='{}' """.format(title)
-    
     cur.execute(sql)
     res = cur.fetchall()
     conn.close()
@@ -141,7 +139,7 @@ def selectTable(tableName):
     cursor = conn.execute("SELECT * from " + tableName)
     res = []
     for row in cursor:
-        res.append({"name":row[0],"key":row[1]})
+        res.append({"name":row[0],"key":row[1],"week":row[2]})
     conn.close()
     return res
 
