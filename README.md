@@ -4,38 +4,44 @@
 ## 简述
 为了便利舍弃通用性，毕竟这软件就是自用的
 
-## 打包
-```
-pyinstaller -F ./main.py --noconsole -p C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib;C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib\site-packages; 
-```
+## 使用
 
-## 直接使用
-* 下载spider-animate.zip，解压后得到两个文件：Animation.db、xxx.exe
-* 执行exe，弹出界面，通过年份季度筛选，目前爬取动漫目录固定。
-
+## 操作
+* 下载spider-animate.zip，解压后双击执行exe文件即可
+* 界面中，通过年份季度筛选此季度的番剧，目前支持的数量被保存在animation.db中，sqlite会的自己加载去改。我会根据自己的需要更新云端数据库，本地的可以通过帮助中的按钮来拉更新。
 ![](./pic/p_1.png)
 
-* 选择需要爬取的目标，点击爬取按钮，等待打印窗口提示爬取完成，然后在执行这个软件目录会有一个result文件夹，该文件夹存放所有爬取动漫的信息。
-
-![](./pic/p_2.png)
+* 结果被保存在result文件夹中，可以直接通过按钮打开，有两种格式html和csv。
+![](../../pic/p_2.png)
 
 * 打开后能看到名称、大小、和磁力链接、种子链接
+
+## 功能按钮
+
+* 更新时间：打印番剧更新时间是星期几
+* 爬今日：爬取今日更新的番剧
+* 爬所有：爬取选择季度的番剧
+* 打开结果文件夹：如其名
 
 
 ## 菜单栏
 
-### 便利
-
-* 爬取今日更新 
-批量爬取当前选择季度的今日更新动漫
-
-* 爬取当前季度
-批量爬取当前选择季度的所有动漫
 
 ### 帮助
 
-* 番剧更新时间
-在信息框中显示当前季度动漫的更新时间
+* 拉去番列表
+通过云端数据库更新本地数据库额番剧列表
 
 * 使用说明
 链接github项目主页
+
+
+## 开发
+### 环境
+```
+
+```
+### 打包
+```
+pyinstaller -F ./main.py --noconsole -p C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib;C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib\site-packages; 
+```

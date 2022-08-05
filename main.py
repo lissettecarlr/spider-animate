@@ -12,7 +12,7 @@ import  sqlite3
 import utils
 import threading
 import syncDb
-
+import os
 class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
         super(wincore,self).__init__()
@@ -21,7 +21,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.init()
         
     def init(self):
-        self.version = "v0.1.5"
+        self.version = "v0.1.6"
         #保存当前季度所有搜索目标
         self.targets = []
         self.dbName = ""
@@ -32,8 +32,12 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.setWindowTitle('爬取工具 ' + self.version)
         # logger.add("./log/webPrint.log",format="{time:YYYY-MM-DD at HH:mm:ss}|{level}|{message}",rotation="500 MB",encoding='utf-8',filter="",level="INFO")
 
-        #绑定事件
+        #按键
         self.pushButton.clicked.connect(self.buttonStart)
+        self.pushButton_2.clicked.connect(self.shwoAnimationUpdate)
+        self.pushButton_3.clicked.connect(self.spidertoday)
+        self.pushButton_4.clicked.connect(self.spiderAll)
+        self.pushButton_5.clicked.connect(self.openResultFile)
 
         #禁止窗口大小改变
         self.setFixedSize(self.width(), self.height())
@@ -53,10 +57,11 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.comboBox_2.currentIndexChanged.connect(self.combox2Change_event)
 
         #菜单
-        self.action.triggered.connect(self.shwoAnimationUpdate)
+        # self.action.triggered.connect(self.shwoAnimationUpdate)
+        # self.action_3.triggered.connect(self.spiderAll)
+        # self.action_4.triggered.connect(self.spidertoday)
+
         self.action_2.triggered.connect(self.readme)
-        self.action_3.triggered.connect(self.spiderAll)
-        self.action_4.triggered.connect(self.spidertoday)
         self.action_5.triggered.connect(self.updateDb)
         
         #读取配置
@@ -158,9 +163,12 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def readme(self):
         QDesktopServices.openUrl(QUrl("https://github.com/lissettecarlr/spider-animate"))
 
-    # 通过数据库查询星期，然后轮询
+    # 爬取今日
     def spidertoday(self):
         res = utils.selectTablebyTodayWeek(self.dbName)
+        if(res == []):
+            self.showMessage("没有今日更新")
+            return
         targets = []
         for p in res:
             targets.append({"name":p["name"],"key":p["key"]})
@@ -188,19 +196,24 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     # 右键菜单
     def showMenu(self,pos):
         self.contextMenu.exec_(QCursor.pos()) 
+
     def Event(self):
         if(self.sender().text() == "清空显示"):
             self.textBrowser.clear()
+
     def updateDb(self):
         syncDb.getAnimationDb()
         self.showMessage("更新番列表完成",color="red")
 
-import os
+    # 打开结果文件夹
+    def openResultFile(self):
+        path = self.basePath + "\\result"
+        os.startfile(path)
+
 
 def winOpen(sys):
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     app= QtWidgets.QApplication(sys.argv)
-
     # 配置
     try:
         base = os.path.dirname(os.path.realpath(sys.argv[0]))

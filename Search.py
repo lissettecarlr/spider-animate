@@ -149,6 +149,7 @@ class  searchTask(threading.Thread):
                     pass
             utils.saveHtmlTable(self.table,self.htmlFile)
             self.uiPrint("对比上次搜索，更新了{}个".format(NewInfoCount))
+            
  
 def getSearchPageNum(soup) -> int:
     return spiderTo36dm.getSearchPageNum(soup)
