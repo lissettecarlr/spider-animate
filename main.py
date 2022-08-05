@@ -21,14 +21,14 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.init()
         
     def init(self):
-        self.version = "v0.1.6"
+        self.version = "v1.0.0"
         #保存当前季度所有搜索目标
         self.targets = []
         self.dbName = ""
         self.basePath = os.path.dirname(os.path.realpath(sys.argv[0]))
         self.statusBar=QStatusBar()
         self.setStatusBar(self.statusBar)
-        self.statusBar.showMessage('久远~~~',5000) 
+        self.statusBar.showMessage('久远揍我~~~',5000) 
         self.setWindowTitle('爬取工具 ' + self.version)
         # logger.add("./log/webPrint.log",format="{time:YYYY-MM-DD at HH:mm:ss}|{level}|{message}",rotation="500 MB",encoding='utf-8',filter="",level="INFO")
 
