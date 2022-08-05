@@ -192,9 +192,8 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         if(self.sender().text() == "清空显示"):
             self.textBrowser.clear()
     def updateDb(self):
-        self.showMessage("开始更新番列表",color="red")
         syncDb.getAnimationDb()
-        self.showMessage("结束更新番列表",color="red")
+        self.showMessage("更新番列表完成",color="red")
 
 import os
 
