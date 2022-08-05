@@ -76,10 +76,13 @@ class Ui_MainWindow(object):
         self.action_3.setObjectName("action_3")
         self.action_4 = QtWidgets.QAction(MainWindow)
         self.action_4.setObjectName("action_4")
+        self.action_5 = QtWidgets.QAction(MainWindow)
+        self.action_5.setObjectName("action_5")
         self.menu.addAction(self.action)
         self.menu.addAction(self.action_2)
         self.menu_2.addAction(self.action_3)
         self.menu_2.addAction(self.action_4)
+        self.menu_2.addAction(self.action_5)
         self.menubar.addAction(self.menu_2.menuAction())
         self.menubar.addAction(self.menu.menuAction())
 
@@ -104,3 +107,4 @@ class Ui_MainWindow(object):
         self.action_2.setText(_translate("MainWindow", "使用说明"))
         self.action_3.setText(_translate("MainWindow", "爬取当前季度"))
         self.action_4.setText(_translate("MainWindow", "爬取今日更新"))
+        self.action_5.setText(_translate("MainWindow", "拉取番列表"))

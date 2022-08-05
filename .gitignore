@@ -58,3 +58,4 @@ scripts/
 
 result/
 mgo.py
+.env

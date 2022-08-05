@@ -149,6 +149,7 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="action_3"/>
     <addaction name="action_4"/>
+    <addaction name="action_5"/>
    </widget>
    <addaction name="menu_2"/>
    <addaction name="menu"/>
@@ -172,6 +173,11 @@ p, li { white-space: pre-wrap; }
   <action name="action_4">
    <property name="text">
     <string>爬取今日更新</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>拉取番列表</string>
    </property>
   </action>
  </widget>

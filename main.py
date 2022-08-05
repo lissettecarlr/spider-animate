@@ -11,6 +11,7 @@ import time
 import  sqlite3
 import utils
 import threading
+import syncDb
 
 class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
@@ -20,7 +21,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.init()
         
     def init(self):
-        self.version = "v0.1.4"
+        self.version = "v0.1.5"
         #保存当前季度所有搜索目标
         self.targets = []
         self.dbName = ""
@@ -56,6 +57,7 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
         self.action_2.triggered.connect(self.readme)
         self.action_3.triggered.connect(self.spiderAll)
         self.action_4.triggered.connect(self.spidertoday)
+        self.action_5.triggered.connect(self.updateDb)
         
         #读取配置
         self.readAnimation("七月番")
@@ -189,6 +191,10 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def Event(self):
         if(self.sender().text() == "清空显示"):
             self.textBrowser.clear()
+    def updateDb(self):
+        self.showMessage("开始更新番列表",color="red")
+        syncDb.getAnimationDb()
+        self.showMessage("结束更新番列表",color="red")
 
 import os
 
