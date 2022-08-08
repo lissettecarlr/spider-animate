@@ -3,7 +3,6 @@ import MySQLdb
 import sqlite3
 from dotenv import find_dotenv, load_dotenv
 
-
 #从云拉去数据
 def connectServerDbReadTable(table):
     load_dotenv(find_dotenv('.env'))

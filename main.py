@@ -202,8 +202,11 @@ class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
             self.textBrowser.clear()
 
     def updateDb(self):
-        syncDb.getAnimationDb()
-        self.showMessage("更新番列表完成",color="red")
+        try:
+            syncDb.getAnimationDb()
+            self.showMessage("更新番列表完成",color="red")
+        except:
+            self.showMessage("更新番列表失败",color="red")
 
     # 打开结果文件夹
     def openResultFile(self):

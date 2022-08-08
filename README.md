@@ -29,8 +29,9 @@
 
 ### 帮助
 
-* 拉去番列表
-通过云端数据库更新本地数据库额番剧列表
+* 拉取番列表
+通过云端数据库更新本地数据库额番剧列表。
+目前使用的MySQLdb需要本地环境才能运行。
 
 * 使用说明
 链接github项目主页
@@ -39,8 +40,14 @@
 ## 开发
 ### 环境
 ```
+pip install -r requirements.txt
+```
+### 执行
 
 ```
+python ./main.py
+```
+
 ### 打包
 ```
 pyinstaller -F ./main.py --noconsole -p C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib;C:\Users\dell\AppData\Local\Programs\Python\Python39\Lib\site-packages; 
