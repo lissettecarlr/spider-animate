@@ -3,14 +3,17 @@ import MySQLdb
 import sqlite3
 from dotenv import find_dotenv, load_dotenv
 
+
 #从云拉去数据
 def connectServerDbReadTable(table):
+
     load_dotenv(find_dotenv('.env'))
     host = os.environ.get("HOST")
     dbname = os.environ.get("DBNAME")
     password = os.environ.get("PASSWORD")
     database = os.environ.get("DATABASE")
     port = int(os.environ.get("PORT"))
+
     try:
         serverdb = MySQLdb.connect(
             host=host,    

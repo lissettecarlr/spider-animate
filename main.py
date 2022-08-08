@@ -8,11 +8,11 @@ from gui import Ui_MainWindow
 import sys
 from loguru import logger
 import time
-import  sqlite3
 import utils
 import threading
 import syncDb
 import os
+
 class wincore (QtWidgets.QMainWindow,Ui_MainWindow):
     def __init__(self):
         super(wincore,self).__init__()
