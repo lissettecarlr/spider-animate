@@ -56,7 +56,10 @@ scripts/
 .idea/
 
 
-client/result/
-client/mgo.py
-client/.env
+mgo.py
+.env
+
+result/
+animate.json
+test.py
 

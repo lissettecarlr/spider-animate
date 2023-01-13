@@ -10,3 +10,12 @@
 pip install html-table
 pip install requests
 ```
+
+## server的功能
+每天爬取一次，邮件发出，标题提示是否有更新。有更新进行微信推送
+
+
+## server使用
+先编辑addSearchAinmate.py填写需要搜索的对象
+然后执行app.py
+
