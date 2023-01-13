@@ -56,52 +56,52 @@ def soupGet(text):
 
 #############################################################################################
 
-from HTMLTable import HTMLTable
+# from HTMLTable import HTMLTable
 
-def createHtmlTable(name):
-    table = HTMLTable(caption=name)
-    table.append_header_rows((
-        ('名称',  '链接',  '大小','时间'),
-    ))  
+# def createHtmlTable(name):
+#     table = HTMLTable(caption=name)
+#     table.append_header_rows((
+#         ('名称',  '链接',  '大小','时间'),
+#     ))  
 
-    table.set_style({
-    'border-collapse': 'collapse',
-    'word-break': 'keep-all',
-    'white-space': 'nowrap',
-    'font-size': '14px',
+#     table.set_style({
+#     'border-collapse': 'collapse',
+#     'word-break': 'keep-all',
+#     'white-space': 'nowrap',
+#     'font-size': '14px',
 
-    })
+#     })
 
-    table.set_cell_style({
-        'border-color': '#000',
-        'border-width': '1px',
-        'border-style': 'solid',
-        'padding': '10px',
-    })
+#     table.set_cell_style({
+#         'border-color': '#000',
+#         'border-width': '1px',
+#         'border-style': 'solid',
+#         'padding': '10px',
+#     })
 
-    # 表头样式
-    table.set_header_row_style({
-        'color': '#fff',
-        'background-color': '#48a6fb',
-        'font-size': '18px',
-    })
+#     # 表头样式
+#     table.set_header_row_style({
+#         'color': '#fff',
+#         'background-color': '#48a6fb',
+#         'font-size': '18px',
+#     })
 
-    # 覆盖表头单元格字体样式
-    table.set_header_cell_style({
-        'padding': '15px',
-    })
+#     # 覆盖表头单元格字体样式
+#     table.set_header_cell_style({
+#         'padding': '15px',
+#     })
 
-    return table
+#     return table
 
-def appendHtmlTable(table,name,url,size,t):
-    table.append_data_rows((    
-        (name, url, size,t),
-    ))
+# def appendHtmlTable(table,name,url,size,t):
+#     table.append_data_rows((    
+#         (name, url, size,t),
+#     ))
 
-def saveHtmlTable(table,path):
-    html =  table.to_html()
-    with open(path,"a") as code:
-        code.write(html)
+# def saveHtmlTable(table,path):
+#     html =  table.to_html()
+#     with open(path,"a") as code:
+#         code.write(html)
 
 # table = createHtmlTable("test")
 # appendHtmlTable(table,"1111111111111   ","   22222222222222222222   ","   3333333333333","4444444444444")
