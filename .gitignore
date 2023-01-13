@@ -56,6 +56,7 @@ scripts/
 .idea/
 
 
-result/
-mgo.py
-.env
+client/result/
+client/mgo.py
+client/.env
+
