@@ -205,9 +205,8 @@ class spiderAnimate:
             return ""
         
     def loop(self):
-        #while(True):
-            #if(time.strftime("%H:%M", time.localtime()) == "14:39"):
-                #print("hello")
+        while(True):
+            if(time.strftime("%H:%M", time.localtime()) == "23:00"):
                 vxContent = ""
                 for sol in self.searchList:
                     msg = self.task(sol) 
@@ -216,8 +215,8 @@ class spiderAnimate:
                 if(vxContent != ""):
                     vxPost("有更新",vxContent)
 
-                #time.sleep(60)
-                #break
+                time.sleep(60)
+                break
             
 
 if __name__ == '__main__':

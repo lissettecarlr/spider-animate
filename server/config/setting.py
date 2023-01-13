@@ -9,7 +9,7 @@ def settinInit():
     try:
         open(projectPath + '/config/animate.json',encoding= 'utf-8')
     except:
-        data={"animate":[],"emailName":"","emailPassword":"","revEmailList":"","vxKey":""}
+        data={"animate":[],"emailName":"","emailPassword":"","revEmailList":[],"vxKey":""}
         with open(projectPath + '/config/animate.json', 'w',encoding='utf-8') as file:
             dump(data, file,ensure_ascii=False,indent = 4)
 
