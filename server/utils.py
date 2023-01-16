@@ -226,11 +226,12 @@ def getNumInAnimateName(name):
             num = num.replace('-', '')
             num = num.replace('\r', '')
             num = num.replace('\n', '')
+            num = num.replace('集', '')
             return int(num)
     return None
 
 
-#print(getNumInAnimateName("wai 5000-nen no Soushoku Dragon (JPN Dub) - 02 (CR 1920x1080 AVC AAC MKV)"))
+print(getNumInAnimateName("wai 5000-nen no Soushoku Dragon (JPN Dub) - [02集] (CR 1920x1080 AVC AAC MKV)"))
 
 #############################################################################################
 
