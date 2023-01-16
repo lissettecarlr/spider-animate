@@ -211,6 +211,9 @@ class spiderAnimate:
         while(True):
             if(time.strftime("%H:%M", time.localtime()) == defaultConfig.alarmClock):
                 vxContent = ""
+                self.data = settinRead()
+                self.searchList = self.data["animate"]
+
                 for sol in self.searchList:
                     msg = self.task(sol) 
                     if(msg !="" and msg != None):

@@ -3,6 +3,7 @@
 from bs4 import BeautifulSoup
 import utils
 import re
+from loguru import logger
 
 baseURL = "https://www.36dm.club"
 
@@ -43,7 +44,7 @@ def getSearchPageNum(soup) -> int:
     # print(pageInfos)
 
     if pageLastInfos == None and pageInfos == None:
-        print("没获取到页码")
+        logger.warning("没获取到页码")
         return None
 
     if len(pageLastInfos) > 0:
@@ -66,7 +67,7 @@ def getSearchTotalNum(soup) -> int:
     try:
         resultCountText = resultCountText[resultCountText.rindex("-") + 1 : len(resultCountText)]
     except:
-        print("resultCountText 截取错误")
+        logger.warning("resultCountText 截取错误")
         return None
     
     resultCounts = re.search(r"\d+",resultCountText)
@@ -109,14 +110,14 @@ def getDownloadInfo(url):
     """ 获取单个文件的信息 """
     detailResponse = utils.requestsGet(url)
     if(detailResponse == None):
-        print("请求页面失败")
+        logger.warning("请求页面失败")
         return None
     soup = utils.soupGet(detailResponse.text)
     detailResponse.close()
     contentInfos = soup.select("#btm > div.main > div > div")
     contentInfoText = contentInfos[0].get_text()
     if contentInfoText == "种子文件不存在！":
-        print("页面异常,没有种子,网址是: {}".format(url))
+        logger.warning("页面异常,没有种子,网址是: {}".format(url))
         return None
 
     # 种子
@@ -168,7 +169,8 @@ def getDownloadInfo(url):
     # print("磁力链接：{}".format(magent))
   
     downloadInfo={"title": title, "downloadUrl": downloadUrl, "magent":magent,"size": size,"time":date}
-    print(downloadInfo)
+    #print(downloadInfo)
+    logger.info(downloadInfo)
     return downloadInfo
 
 #getDownloadInfo("https://www.36dm.club/show-88878e07fd0e172d12c50ac3356239dda83708f2.html")
