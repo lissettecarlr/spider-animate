@@ -40,14 +40,17 @@ def requestsGet(url):
     if(url.find('http',0) == -1):
         return None
     try:
-        return requests.get(url, headers = headers , timeout=10)
-    except:
+        response  = requests.get(url, headers = headers , timeout=30)
+        return response
+    except Exception as ex:
+        print("requestsGet 异常："+str(ex))
         return None
 
 def requestsPost(url):
     try:
-        return requests.post(url, headers = headers , timeout=10)
-    except:
+        return requests.post(url, headers = headers , timeout=30)
+    except Exception as ex:
+        print("requestsGet 异常："+str(ex))
         return None
 
 def soupGet(text):
@@ -172,6 +175,8 @@ def selectTablebyTodayWeek(tableName):
 
 #############################################################################################
 def animateNumList():
+
+    # [01] [1]
     h = "["
     e = "]"
     numList =[]
@@ -183,6 +188,7 @@ def animateNumList():
         s = h + '0' +str(i) + e
         numList.append(s)   
 
+    # - 01 
     h2 = "- "
     e2 = " "
     for i in range(10):
@@ -191,7 +197,17 @@ def animateNumList():
     for i in range(100):
         s = h2 + str(i) + e2
         numList.append(s)
-         
+
+    # [01集]
+    h3 = "["
+    e3 = "集]"
+    for i in range(10):
+        s = h3 + '0' +str(i) + e3
+        numList.append(s) 
+    for i in range(100):
+        s = h3 + str(i) + e3
+        numList.append(s)
+
     return numList
 
 animateNumList = animateNumList()
@@ -212,6 +228,7 @@ def getNumInAnimateName(name):
             num = num.replace('\n', '')
             return int(num)
     return None
+
 
 #print(getNumInAnimateName("wai 5000-nen no Soushoku Dragon (JPN Dub) - 02 (CR 1920x1080 AVC AAC MKV)"))
 

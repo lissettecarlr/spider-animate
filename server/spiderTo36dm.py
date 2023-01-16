@@ -17,12 +17,12 @@ def searchAnimation(keyword , pageNum = None):
     keywordURL = baseURL + keyword + page
     keywordResponse = utils.requestsGet(keywordURL)
     if(keywordResponse == None):
-        print("搜索失败")
+        #print("搜索失败")
         return None, None
 
     soup = utils.soupGet(keywordResponse.text)
-
     htmlText = keywordResponse.text
+    keywordResponse.close()
     return (soup, htmlText)
 
 # 通过解析后的soup，提取搜索结果中的页码
@@ -112,6 +112,7 @@ def getDownloadInfo(url):
         print("请求页面失败")
         return None
     soup = utils.soupGet(detailResponse.text)
+    detailResponse.close()
     contentInfos = soup.select("#btm > div.main > div > div")
     contentInfoText = contentInfos[0].get_text()
     if contentInfoText == "种子文件不存在！":

@@ -37,6 +37,7 @@ class spiderAnimate:
 
         #配置文件
         settinInit()
+        logger.info("爬取列表：{}".format(self.searchList))
 
     def task(self,sol):
         animateName = sol["name"]
@@ -46,21 +47,21 @@ class spiderAnimate:
         searchKey = animateName + " " + animateKey
         (soup, htmlText) = searchAnimation(keyword = searchKey)
         if(soup == None):
-            logger.warning("爬取失败")
-            return
+            logger.warning("{} 爬取失败".format(searchKey))
+            return None
 
         # 该关键字搜索出的页码
         pageNum = getSearchPageNum(soup)
         logger.info("关键字：{}，共有：{} 页".format(searchKey,pageNum))
         if pageNum == None:
             logger.warning("搜索：{}，没有找到资源".format(searchKey))
-            return
+            return None
 
         # 该关键字搜索出的数据总数
         resultCount = spiderTo36dm.getSearchTotalNum(soup)
         if resultCount == 0 or resultCount == None:
             logger.warning("该页没有资源.")
-            return
+            return None
         logger.info("共搜索出资源：{}".format(resultCount)) 
 
         
@@ -77,7 +78,7 @@ class spiderAnimate:
             #logger.info(self.result)
         #msg = self.saveResult(self.result,animateName,animateEpisode)
         msg = self.saveResult2(self.result,animateName)
-        logger.info(msg)
+        logger.info("{} 处理结束，结果：{}".format(animateName,msg))
         return msg
  
 
@@ -100,7 +101,7 @@ class spiderAnimate:
             downloadInfo = spiderTo36dm.getDownloadInfo(url)
             #{'title': '[Isekai Ojisan][10].mp4', 'downloadUrl': 'https://', 'magent': 'magnet:?', 'size': '369.6MB', 'time': '2022/12/19 23:22:17'}
             if downloadInfo == None:
-                logger.info("获取失败")
+                logger.info("{} 子页面获取失败".format(url))
                 continue
             # 将所有下载信息添加到列表中
             downloadInfos.append(downloadInfo)
@@ -177,6 +178,7 @@ class spiderAnimate:
             shutil.rmtree(animatePath)   
             os.makedirs(animatePath)
 
+        logger.info("开始将结果保存到：{}".format(os.path.join(animatePath,name+".html")))
         table = htmlTable(["名称",'磁力链接','大小','时间'])
         updateList = []
         for sol in downInfo:
@@ -193,6 +195,7 @@ class spiderAnimate:
         table.save(os.path.join(animatePath,name+".html"))
         updateList.sort()
         #判断是否有集数更新，但是不管是否都回发送邮件
+        logger.info("开始发送邮件")
         htmlStr = table.getHtmlStr()
         se = SendEmail()
         if(updateList !=[]):
@@ -206,18 +209,22 @@ class spiderAnimate:
         
     def loop(self):
         while(True):
-            if(time.strftime("%H:%M", time.localtime()) == "23:00"):
+            if(time.strftime("%H:%M", time.localtime()) == defaultConfig.alarmClock):
                 vxContent = ""
                 for sol in self.searchList:
                     msg = self.task(sol) 
-                    if(msg !=""):
-                        vxContent = vxContent + msg + "\t\r\n"
+                    if(msg !="" and msg != None):
+                        vxContent = vxContent + msg + " \t\r\n "
+                   
                 if(vxContent != ""):
                     vxPost("有更新",vxContent)
 
-                time.sleep(60)
-                break
-            
+                logger.info("爬取结束，进入延时")
+                time.sleep(defaultConfig.overSleep)
+                # break
+            else:
+                #logger.info(time.strftime("%H:%M", time.localtime()))
+                time.sleep(defaultConfig.cycleSleep)
 
 if __name__ == '__main__':
     app = spiderAnimate()
