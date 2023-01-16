@@ -2,13 +2,14 @@
 
 
 ## 简述
-果然，本地客户端对于懒人来说还是太麻烦，每次要去打开个exe好累，之前那个本地客户端扔到了client里面，现在弄个直接扔到服务器上去爬新番，相关文件放到server中
+果然，本地客户端对于懒人来说还是太麻烦，每次要去打开个exe好累，之前客户端代码扔到了client文件夹里面了，现在弄个直接扔到服务器上去爬新番，相关文件放到server中。目前肯定用后者，所有此文档只说server端
 
 
 ## server的环境
 ```
-pip install html-table
 pip install requests
+pip install loguru
+pip install beautifulsoup4
 ```
 
 ## server的功能
@@ -16,6 +17,34 @@ pip install requests
 
 
 ## server使用
-先编辑addSearchAinmate.py填写需要搜索的对象
-然后执行app.py
+* 进入目录
+```
+cd server
+```
+* 编辑和加入爬取动画
+```
+vim addSearchAinmate.py
+python addSearchAinmate.py
+```
+* 邮箱相关配置和执行时间
+```
+vim config
+vim config/animate.json
+
+"emailName": "lissettecarlr1@163.com",
+"emailPassword": "",
+"revEmailList": [
+    "mbdx98@163.com"
+],
+"vxKey": ""
+
+vim defaultCfg.py
+
+alarmClock = "23:00"
+```
+后台运行
+```
+nohup python app.py>run.log &
+```
+
 
