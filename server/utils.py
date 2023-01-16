@@ -231,7 +231,7 @@ def getNumInAnimateName(name):
     return None
 
 
-print(getNumInAnimateName("wai 5000-nen no Soushoku Dragon (JPN Dub) - [02集] (CR 1920x1080 AVC AAC MKV)"))
+#print(getNumInAnimateName("wai 5000-nen no Soushoku Dragon (JPN Dub) - [02集] (CR 1920x1080 AVC AAC MKV)"))
 
 #############################################################################################
 
